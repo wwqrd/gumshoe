@@ -13,8 +13,8 @@ import os
 from imu import IMU
 from database import database_set, database_get
 
-STRENGTH = ['feeble', 'wimpy', 'coy', 'lonely', 'uber', 'evil', 'l33t']
-BREEDS = ['dweeb', 'nerd', 'scriptkid', 'haxor', 'blackhat', 'whitehat', 'consumate professional']
+STRENGTH = ['feeble', 'wimpy', 'coy', 'lonely', 'uber', 'evil', 'l33t'] # ajectives
+BREEDS = ['dweeb', 'nerd', 'scriptkiddie', 'h4x0r', 'blackhat', 'whitehat', 'sysadmin'] # nouns
 
 def roll_dice(sides):
     return round((pyb.rng()/1073741824) * sides)
