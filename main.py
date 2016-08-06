@@ -13,84 +13,73 @@ import os
 from imu import IMU
 from database import database_set, database_get
 
-STRENGTH = ['feeble', 'wimpy', 'coy', 'kind', 'uber', 'evil']
-
-class Hacker:
-
-    # generate a hacker
-    @classmethod
-    def discover():
-        return Hacker('Hacker',
-                      randint(0, len(STRENTH) - 1))
-
-    def __init__(name, strength):
-        self.name = name
-        self.strength = strength
-
-    # hacker's name
-    def get_name():
-        return self.name
-
-    # hacker strength
-    def get_strength():
-        return STRENGTH[self.strength]
+STRENGTH = ['feeble', 'wimpy', 'coy', 'lonely', 'uber', 'evil', 'l33t']
+BREEDS = ['dweeb', 'nerd', 'scriptkid', 'haxor', 'blackhat', 'whitehat', 'consumate professional']
 
 def roll_dice(sides):
     return round((pyb.rng()/1073741824) * sides)
 
+class Hacker:
+    def __init__(self, name, strength):
+        self.name = name
+        self.strength = strength
+
+    # hacker's name
+    def get_name(self):
+        return BREEDS[self.name]
+
+    # hacker strength
+    def get_strength(self):
+        return STRENGTH[self.strength]
+
 class Gumshoe:
-    def __init__():
-        self.heat(0)
+    def __init__(self):
+        self.heat_factor = 0
         self.captures = 0
         self.load()
 
-    def load():
+    def load(self):
         heat = database_get('gumshoe_stats_heat')
         if heat:
-            self.heat(heat)
+            self.heat_factor = heat
         captures = database_get('gumshoe_stats_captures')
         if captures:
             self.captures = captures
 
-    def save():
-        database_set('gumshoe_stats_heat', self.heat())
+    def save(self):
+        database_set('gumshoe_stats_heat', self.heat_factor)
         database_set('gumshoe_stats_captures', self.captures())
 
     # find a hacker
-    def conduct_search():
-        dice = roll_dice(20) + self.heat()
-        if dice < 15:
-            # You find nothing
-            self.heat(self.heat() + 1)
-            return "You find nothing."
+    def conduct_search(self):
+        dice = roll_dice(20) + self.heat_factor
+        print('dice roll: %i' % dice)
 
-        if dice > 15 and dice < 18:
+        if dice >= 15 and dice <= 19:
             # You are close!
-            self.heat (5)
+            self.heat_factor = 10
             return "You can sense something nearby!"
 
-        if dice > 20:
+        if dice >= 20:
             # You found a hacker!
-            self.heat(-5)
-            self.tailing = Hacker.generate()
-            return "You found a {self.tailing.get_strength()} {self.tailing.get_name()}!"
-            self.save()
+            self.heat_factor = -3
+            self.tail = Hacker(roll_dice(len(BREEDS) - 1), roll_dice(len(STRENGTH) - 1))
+            return "You found a " + self.tail.get_strength() + " " + self.tail.get_name() + "!"
+
+        # You find nothing
+        self.heat_factor = self.heat_factor + 1
+        return "You find nothing."
 
     # return sleuth skill
-    def skill():
+    def skill(self):
         return self.captures() * 7
 
     # which hackers has sleuth caught
     def captures():
         return 0
 
-    # multiplier for how likely sleuth will find something
-    def heat(heat_factor):
-        if heat_factor:
-            self.heat_factor = heat_factor
-        return self.heat_factor
-
     def save():
+        return 1
 
 ugfx.init()
 buttons.init()
@@ -119,4 +108,4 @@ while True:
     pyb.wfi()
     set_orientation()
     play()
-    pyb.delay(15000)
+    pyb.delay(1000)
