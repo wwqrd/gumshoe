@@ -1,17 +1,21 @@
-class Hacker
+STRENGTH = ['feeble', 'wimpy', 'coy', 'kind', 'uber', 'evil']
+
+class Hacker:
 
     # generate a hacker
     @classmethod
     def discover():
+        return Hacker('Hacker',
+                      randint(0, len(STRENTH) - 1))
 
-    def __init__(name, description):
+    def __init__(name, strength):
         self.name = name
-        self.description = description
+        self.strength = strength
 
     # hacker's name
-    def name():
+    def get_name():
         return self.name
 
-    # hacker description
-    def description():
-        return self.description
+    # hacker strength
+    def get_strength():
+        return STRENGTH[self.strength]
