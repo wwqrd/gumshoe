@@ -1,5 +1,5 @@
 ### Author: Wayward, Joshua, Dave Arter @davea
-### Description: Find hackers around the site, and capture them!
+### Description: Find hackers around the site, and bring them to justice!
 ### Category: Games
 ### License: MIT
 ### Appname: Gumshoe
@@ -13,8 +13,8 @@ import os
 from imu import IMU
 from database import database_set, database_get
 
-utils = __import__("apps/theinstitution~gumshoe/utils")
-Gumshoe = __import__("apps/theinstitution~gumshoe/gumshoe")
+utils = __import__("apps/gumshoe/utils")
+Gumshoe = __import__("apps/gumshoe/gumshoe")
 
 ugfx.init()
 buttons.init()
