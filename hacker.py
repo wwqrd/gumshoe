@@ -1,3 +1,5 @@
+from random import randint
+
 STRENGTH = ['feeble', 'wimpy', 'coy', 'kind', 'uber', 'evil']
 
 class Hacker:

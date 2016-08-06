@@ -12,17 +12,18 @@ class Gumshoe:
         if dice < 15:
             # You find nothing
             self.heat(self.heat() + 1)
-            return "You find nothing"
+            return "You find nothing."
 
         if dice > 15 and dice < 18:
             # You are close!
             self.heat (5)
+            return "You can sense something nearby!"
 
         if dice > 20:
             # You found a hacker!
             self.heat(-5)
             self.tailing = Hacker.generate()
-            return "You found a {self.tailing.strength()} {self.tailing.name()}"
+            return "You found a {self.tailing.get_strength()} {self.tailing.get_name()}!"
 
     # return sleuth skill
     def skill():
