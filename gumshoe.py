@@ -1,11 +1,24 @@
-from random import randint
+from database import database_set, datebase_get
+
 Hacker = __import__("apps/theinstitution~gumshoe/hacker")
 
 class Gumshoe:
-
     def __init__():
         self.heat(0)
         self.captures = 0
+        self.load()
+
+    def load():
+        heat = database_get('gumshoe_stats_heat')
+        if heat:
+            self.heat(heat)
+        captures = database_get('gumshoe_stats_captures')
+        if captures:
+            self.captures = captures
+
+    def save():
+        database_set('gumshoe_stats_heat', self.heat())
+        database_set('gumshoe_stats_captures', self.captures())
 
     # find a hacker
     def conduct_search():
@@ -25,6 +38,7 @@ class Gumshoe:
             self.heat(-5)
             self.tailing = Hacker.generate()
             return "You found a {self.tailing.get_strength()} {self.tailing.get_name()}!"
+            self.save()
 
     # return sleuth skill
     def skill():
@@ -39,3 +53,6 @@ class Gumshoe:
         if heat_factor:
             self.heat_factor = heat_factor
         return self.heat_factor
+
+    def save():
+        dat
