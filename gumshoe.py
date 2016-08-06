@@ -1,4 +1,5 @@
 from random import randint
+Hacker = __import__("apps/theinstitution~gumshoe/hacker")
 
 class Gumshoe:
 
