@@ -4,6 +4,19 @@
 ### License: MIT
 ### Appname: Gumshoe
 
+
+
+# TODO
+ # 
+ # - opening screen: 'What is your hacker alias?' -- Can we get this from the device?
+ # - Default screen to show user and their exp
+ # - Shake device to search
+ # - When hacker encountered, two options:
+ #    - FIGHT! You stand a {poor | fair | good | excellent} chance of winning
+ #    - RUN! You have a x% chance of losing some exp.
+ # - "battle screen" to show two exp bars
+ #    - exp to increase following battle, according to fraction of enemy exp
+
 import ubinascii as binascii
 import wifi
 import buttons
@@ -13,8 +26,8 @@ import os
 from imu import IMU
 from database import database_set, database_get
 
-STRENGTH = ['feeble', 'wimpy', 'coy', 'lonely', 'uber', 'evil', 'l33t'] # ajectives
-BREEDS = ['dweeb', 'nerd', 'scriptkiddie', 'h4x0r', 'blackhat', 'whitehat', 'sysadmin'] # nouns
+STRENGTH = ['gloriously bald', 'bearded', 'cute', 'feeble', 'wimpy', 'coy', 'lonely', 'emo', 'uber', 'mutant', 'evil', 'l33t'] # ajectives
+BREEDS = ['n00b', 'pokemon player', 'dweeb', 'nerd', 'geek', 'scriptkiddie', 'h4x0r', 'blackhat', 'whitehat', 'sysadmin', 'rogue A.I'] # nouns
 
 def roll_dice(sides):
     return round((pyb.rng()/1073741824) * sides)
