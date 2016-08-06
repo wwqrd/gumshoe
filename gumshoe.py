@@ -2,6 +2,9 @@ from database import database_set, datebase_get
 
 Hacker = __import__("apps/theinstitution~gumshoe/hacker")
 
+def roll_dice(sides):
+    return round((pyb.rng()/1073741824) * sides)
+
 class Gumshoe:
     def __init__():
         self.heat(0)
@@ -22,7 +25,7 @@ class Gumshoe:
 
     # find a hacker
     def conduct_search():
-        dice = randint(0,20) + self.heat()
+        dice = roll_dice(20) + self.heat()
         if dice < 15:
             # You find nothing
             self.heat(self.heat() + 1)
