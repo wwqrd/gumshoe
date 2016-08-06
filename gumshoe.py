@@ -1,6 +1,6 @@
 from database import database_set, database_get
 
-Hacker = __import__("apps/theinstitution~gumshoe/hacker")
+Hacker = __import__("apps/gumshoe/hacker")
 
 def roll_dice(sides):
     return round((pyb.rng()/1073741824) * sides)
