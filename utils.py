@@ -4,7 +4,7 @@ import wifi
 from database import database_set
 
 DATABASE_KEY = "current-location"
-BSSIDS_CSV = "apps/davea~whereami/bssids.csv"
+BSSIDS_CSV = "apps/gumshoe/bssids.csv"
 
 def add_locations(aps):
     with open(BSSIDS_CSV, "rb") as f:

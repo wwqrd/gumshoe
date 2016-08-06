@@ -1,7 +1,7 @@
 needs_wifi = True
 update_rate = 120 * 1000
 
-utils = __import__("apps/davea~whereami/utils")
+utils = __import__("apps/gumshoe/utils")
 
 def tick():
     print("whereami tick")
