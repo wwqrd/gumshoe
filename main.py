@@ -33,22 +33,25 @@ def roll_dice(sides):
     return round((pyb.rng()/1073741824) * sides)
 
 class Hacker:
-    def __init__(self, name, exp):
-        self.name = name
-        self.exp = exp
 
-    # hacker's name
-    def get_name(self):
-        return BREEDS[self.name]
+    @classmethod
+    def discover(player_xp):
+       breed = BREEDS[roll_dice(len(BREEDS) - 1)]
+       xp = player_xp + roll_dice(10) - 5
+       return Hacker(breed, xp)
 
-    # hacker exp
-    def get_exp(self):
-        return STRENGTH[self.exp]
+    def __init__(self, breed, xp):
+        self.breed = breed
+        self.xp = xp
+
+    def description():
+        return ("%i %s" % xp, breed)
 
 class Gumshoe:
     def __init__(self):
         self.heat_factor = 0
         self.captures = 0
+        self.xp = 0
         self.load()
 
     def load(self):
@@ -76,20 +79,13 @@ class Gumshoe:
         if dice >= 20:
             # You found a hacker!
             self.heat_factor = -3
-            self.tail = Hacker(roll_dice(len(BREEDS) - 1), roll_dice(len(STRENGTH) - 1))
-            return "You found a " + self.tail.get_exp() + " " + self.tail.get_name() + "!"
+            self.tail = Hacker.discover(self.xp)
+            self.xp + self.xp + 5
+            return "You found a " + self.tail.description() + "!"
 
         # You find nothing
         self.heat_factor = self.heat_factor + 1
         return "You find nothing."
-
-    # return sleuth skill
-    def skill(self):
-        return self.captures() * 7
-
-    # which hackers has sleuth caught
-    def captures():
-        return 0
 
     def save():
         return 1
