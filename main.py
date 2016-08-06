@@ -99,10 +99,15 @@ class Game:
     def __init__(self):
         self.gumshoe = Gumshoe()
 
-    def inactive():
-        return True
+    def inactive(self):
+        while True:
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 5, ugfx.width(), 20, "Hello agent,")
+            ugfx.Label(5, 20, ugfx.width(), 20, "Captures: %i" % self.gumshoe.captures)
+            ugfx.Label(5, 40, ugfx.width(), 20, "XP: %i" % self.gumshoe.xp)
+            pyb.delay(1000)
 
-    def search():
+    def search(self):
         ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
         ugfx.Label(5, 5, ugfx.width(), 20, "Scanning for hackers!...")
         ugfx.set_default_font(ugfx.FONT_NAME)
@@ -117,18 +122,5 @@ ugfx.clear()
 imu = IMU()
 game = Game()
 
-def set_orientation():
-    orientation = ugfx.orientation()
-    ival = imu.get_acceleration()
-    if ival['y'] < -0.5:
-        if orientation != 0:
-            ugfx.orientation(0)
-    elif ival['y'] > 0.5:
-        if orientation != 180:
-            ugfx.orientation(180)
+game.inactive()
 
-while True:
-    pyb.wfi()
-    set_orientation()
-    game.search()
-    pyb.delay(1000)
