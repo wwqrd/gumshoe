@@ -1,4 +1,4 @@
-### Author: Wayward, Joshua, Dave Arter @davea
+### Author: Wayward & Joshua
 ### Description: Find hackers around the site, and bring them to justice!
 ### Category: Games
 ### License: MIT
