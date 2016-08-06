@@ -1,4 +1,4 @@
-from database import database_set, datebase_get
+from database import database_set, database_get
 
 Hacker = __import__("apps/theinstitution~gumshoe/hacker")
 
