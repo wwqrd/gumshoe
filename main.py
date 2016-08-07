@@ -33,17 +33,29 @@ def roll_dice(sides):
 class Hacker:
 
     @classmethod
+    def xp_range(player_xp):
+        return round(player_xp)
+
+    @classmethod
     def discover(player_xp):
        breed = BREEDS[roll_dice(len(BREEDS) - 1)]
-       xp = player_xp + roll_dice(10) - 5
+       base_xp = player_xp
+       xp_range = Hacker.xp_range(player_xp)
+       xp = player_xp + roll_dice(xp_range*2) - xp_range
        return Hacker(breed, xp)
+
+    def relative_strength(self, player_xp):
+        xp_range = Hacker.xp_range(player_xp)
+        xp_relative_value = (self.xp - player_xp + xp_range)/(xp_range*2)
+        relative_strength = round(xp_relative_value * len(STRENGTH))
+        return STRENGTH[relative_strength]
 
     def __init__(self, breed, xp):
         self.breed = breed
         self.xp = xp
 
-    def description():
-        return ("%i %s" % xp, breed)
+    def description(player_xp):
+        return ("%i %s" % relative_strength(player_xp), breed)
 
 class Gumshoe:
     def __init__(self):
@@ -78,15 +90,13 @@ class Gumshoe:
             # You found a hacker!
             self.heat_factor = -3
             self.tail = Hacker.discover(self.xp)
+            tail_description = self.tail.description(self.xp)
             self.xp + self.xp + 5
-            return "You found a " + self.tail.description() + "!"
+            return "You found a %s!" % tail_description
 
         # You find nothing
         self.heat_factor = self.heat_factor + 1
         return "You find nothing."
-
-    def save():
-        return 1
 
 class Game:
 
