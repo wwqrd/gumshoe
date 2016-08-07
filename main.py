@@ -68,7 +68,7 @@ class Gumshoe:
         heat = database_get('gumshoe_stats_heat')
         if heat:
             self.heat_factor = heat
-            captures = database_get('gumshoe_stats_captures')
+        captures = database_get('gumshoe_stats_captures')
         if captures:
             self.captures = captures
 
@@ -144,24 +144,17 @@ class Game:
             # ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
         else:
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
-            ugfx.Label(5, 5, ugfx.width(), 20, "Hello agent,")
-            ugfx.Label(5, 20, ugfx.width(), 20, "Captures: %i" % self.gumshoe.captures)
-            ugfx.Label(5, 40, ugfx.width(), 20, "XP: %i" % self.gumshoe.xp)
+            ugfx.Label(5, 5, ugfx.width(), 25, "Hello agent,")
+            ugfx.Label(5, 25, ugfx.width(), 25, "Captures: %i" % self.gumshoe.captures)
+            ugfx.Label(5, 50, ugfx.width(), 25, "XP: %i" % self.gumshoe.xp)
+            ugfx.Label(5, 75, ugfx.width(), 25, "Instructions:")
+            ugfx.Label(5, 100, ugfx.width(), 25, "(1) Explore the EMF site")
+            ugfx.Label(5, 125, ugfx.width(), 50, "(2) When in position, press A to start a search for nearby hackers...")
+            ugfx.Label(5, 175, ugfx.width(), 50, "Beware of confronting more experienced hackers!")
 
     def inactive(self):
         self.state == 'INACTIVE'
-        print('Inactive Screen')
-        buttons.init()
-        buttons.enable_interrupt("BTN_A", self.bullshit)
-        ugfx.clear()
-        ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
-        ugfx.Label(5, 5, ugfx.width(), 25, "Hello agent,")
-        ugfx.Label(5, 25, ugfx.width(), 25, "Captures: %i" % self.gumshoe.captures)
-        ugfx.Label(5, 50, ugfx.width(), 25, "XP: %i" % self.gumshoe.xp)
-        ugfx.Label(5, 75, ugfx.width(), 25, "Instructions:")
-        ugfx.Label(5, 100, ugfx.width(), 25, "(1) Explore the EMF site")
-        ugfx.Label(5, 125, ugfx.width(), 50, "(2) When in position, press A to start a search for nearby hackers...")
-        ugfx.Label(5, 175, ugfx.width(), 50, "Beware of confronting more experienced hackers!")
+
 
     def search(self):
         self.state == 'SEARCH'
