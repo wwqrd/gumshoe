@@ -171,9 +171,10 @@ class Game:
         print('search method')
         self.state == 'SEARCH'
         self.battle = Battle(self.gumshoe.xp, dice_roll)
-        if(self.battle == True)
+        if(self.battle == True):
+            self.batle()
 
-    def battle(self, hacker):
+    def battle(self):
         self.state == 'BATTLE'
 
 ugfx.init()
