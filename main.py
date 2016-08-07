@@ -128,6 +128,7 @@ class Game:
         self.state = 'INACTIVE'
 
     def render(self):
+        print('render '+self.state)
         ugfx.clear()
         if self.state == 'SEARCH':
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
@@ -136,12 +137,7 @@ class Game:
             ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
         elif self.state == 'BATTLE':
             return True
-            # 320 x 240
-            #
-            # ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
-            # ugfx.Label(5, 5, ugfx.width(), 20, "Your oponent attacks!")
-            # ugfx.set_default_font(ugfx.FONT_NAME)
-            # ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
+
         else:
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 25, "Hello agent,")
@@ -152,11 +148,17 @@ class Game:
             ugfx.Label(5, 125, ugfx.width(), 50, "(2) When in position, press A to start a search for nearby hackers...")
             ugfx.Label(5, 175, ugfx.width(), 50, "Beware of confronting more experienced hackers!")
 
+    def btn_handler(self, thing):
+        print('button handler')
+        self.search()
+
     def inactive(self):
         self.state == 'INACTIVE'
-
+        buttons.init()
+        buttons.enable_interrupt("BTN_A", self.btn_handler)
 
     def search(self):
+        print('search method')
         self.state == 'SEARCH'
 
     def battle(self, hacker):
