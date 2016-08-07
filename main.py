@@ -97,21 +97,23 @@ class Battle:
     def __init__(self, player_xp, dice_roll):
         self.player_xp = player_xp
         self.dice_roll = dice_roll
+        self.status = ''
 
     def conduct_search(self):
 
         if dice < 15:
-            message = "You find nothing."
+            self.status = "You find nothing."
             return False
 
         if self.dice >= 15 and self.dice <= 19:
-            message = "You can sense something nearby!"
+            self.status = "You can sense something nearby!"
             return False
 
         if dice >= 20:
             self.target = Hacker.discover(self.xp)
             target_description = self.tail.description(self.xp)
-            message = "You found %ais!" % tail_description
+            self.status = "You found %ais!" % tail_description
+            return True
 
     # Do you want to do battle?
     def choose_action():
