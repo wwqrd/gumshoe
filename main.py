@@ -95,6 +95,7 @@ class Gumshoe:
 class Battle:
 
     def __init__(self, player_xp, dice_roll):
+        print('BATTLE')
         self.player_xp = player_xp
         self.dice_roll = dice_roll
         self.status = ''
@@ -170,7 +171,7 @@ class Game:
     def search(self):
         print('search method')
         self.state == 'SEARCH'
-        self.battle = Battle(self.gumshoe.xp, dice_roll)
+        self.battle = Battle(self.gumshoe.xp, roll_dice)
         if(self.battle == True):
             self.batle()
 
@@ -184,6 +185,8 @@ imu = IMU()
 game = Game()
 
 game.inactive()
+
+
 
 while True:
     game.render()
