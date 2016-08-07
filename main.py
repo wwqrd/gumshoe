@@ -161,15 +161,10 @@ class Game:
             ugfx.Label(5, 125, ugfx.width(), 50, "(2) When in position, press A to start a search for nearby hackers...")
             ugfx.Label(5, 175, ugfx.width(), 50, "Beware of confronting more experienced hackers!")
 
-    def btn_handler(self, thing):
-        print('button handler')
-        self.search()
-
     def inactive(self):
         global game_state
         game_state == 'INACTIVE'
         buttons.init()
-        buttons.enable_interrupt("BTN_A", self.btn_handler)
 
     def search(self):
         global game_state
@@ -192,8 +187,8 @@ game = Game()
 
 game.inactive()
 
-
-
 while True:
     game.render()
-    pyb.delay(1000)
+    pyb.delay(500)
+    if(game_state == 'INACTIVE' and buttons.is_triggered("BTN_A")):
+        game.search()
