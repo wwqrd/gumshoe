@@ -4,18 +4,16 @@
 ### License: MIT
 ### Appname: Gumshoe
 
-
-
 # TODO
- #
- # - opening screen: 'What is your hacker alias?' -- Can we get this from the device?
- # - Default screen to show user and their exp
- # - Shake device to search
- # - When hacker encountered, two options:
- #    - FIGHT! You stand a {poor | fair | good | excellent} chance of winning
- #    - RUN! You have a x% chance of losing some exp.
- # - "battle screen" to show two exp bars
- #    - exp to increase following battle, according to fraction of enemy exp
+#
+# - opening screen: 'What is your hacker alias?' -- Can we get this from the device?
+# - Default screen to show user and their exp
+# - Shake device to search
+# - When hacker encountered, two options:
+#    - FIGHT! You stand a {poor | fair | good | excellent} chance of winning
+#    - RUN! You have a x% chance of losing some exp.
+# - "battle screen" to show two exp bars
+#    - exp to increase following battle, according to fraction of enemy exp
 
 import ubinascii as binascii
 import wifi
@@ -120,7 +118,7 @@ class Game:
         return True
 
     def welcome(self):
-
+        return True
 
 ugfx.init()
 buttons.init()
