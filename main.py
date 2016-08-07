@@ -171,7 +171,7 @@ class Game:
         print('search method')
         dice_roll = self.gumshoe.conduct_search()
         self.current_battle = Battle(self.gumshoe.xp, dice_roll)
-        self.state == 'SEARCH'
+        game_state == 'SEARCH'
         if(self.current_battle.conduct_search() == True):
             self.battle()
 
@@ -189,6 +189,6 @@ game.inactive()
 
 while True:
     game.render()
-    pyb.delay(500)
-    if(game_state == 'INACTIVE' and buttons.is_triggered("BTN_A")):
+    if(game_state == 'INACTIVE' and buttons.is_pressed("BTN_A")):
         game.search()
+    pyb.delay(500)
