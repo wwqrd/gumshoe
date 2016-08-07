@@ -7,7 +7,7 @@
 # TODO
 #
 # - opening screen: 'What is your hacker alias?' -- Can we get this from the device?
-# - Default screen to show user and their exp
+# - Default show user and their exp
 # - Shake device to search
 # - When hacker encountered, two options:
 #    - FIGHT! You stand a {poor | fair | good | excellent} chance of winning
@@ -68,7 +68,7 @@ class Gumshoe:
         heat = database_get('gumshoe_stats_heat')
         if heat:
             self.heat_factor = heat
-        captures = database_get('gumshoe_stats_captures')
+            captures = database_get('gumshoe_stats_captures')
         if captures:
             self.captures = captures
 
@@ -82,53 +82,80 @@ class Gumshoe:
         print('dice roll: %i' % dice)
 
         if dice >= 15 and dice <= 19:
-            # You are close!
             self.heat_factor = 10
-            return "You can sense something nearby!"
 
         if dice >= 20:
-            # You found a hacker!
             self.heat_factor = -3
-            self.tail = Hacker.discover(self.xp)
-            tail_description = self.tail.description(self.xp)
-            self.xp + self.xp + 5
-            return "You found a %s!" % tail_description
 
-        # You find nothing
-        self.heat_factor = self.heat_factor + 1
-        return "You find nothing."
+        if dice < 15:
+            self.heat_factor = self.heat_factor + 1
+
+        return dice
+
+class Battle:
+
+    def __init__(self, player_xp, dice_roll):
+        self.player_xp = player_xp
+        self.dice_roll = dice_roll
+
+    def conduct_search(self):
+
+        if dice < 15:
+            message = "You find nothing."
+            return False
+
+        if self.dice >= 15 and self.dice <= 19:
+            message = "You can sense something nearby!"
+            return False
+
+        if dice >= 20:
+            self.target = Hacker.discover(self.xp)
+            target_description = self.tail.description(self.xp)
+            message = "You found %ais!" % tail_description
+
+    # Do you want to do battle?
+    def choose_action():
+        return True
+
+    # Do battle!
+    def battle():
+        return True
 
 class Game:
 
     def __init__(self):
         self.gumshoe = Gumshoe()
+        self.state = 'INACTIVE'
 
-    def inactive(self):
-        while True:
+    def render(self):
+        ugfx.clear()
+        if self.state == 'SEARCH':
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 5, ugfx.width(), 20, "Scanning for hackers!...")
+            ugfx.set_default_font(ugfx.FONT_NAME)
+            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
+        elif self.state == 'BATTLE':
+            return True
+            # 320 x 240
+            #
+            # ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            # ugfx.Label(5, 5, ugfx.width(), 20, "Your oponent attacks!")
+            # ugfx.set_default_font(ugfx.FONT_NAME)
+            # ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
+        else:
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 20, "Hello agent,")
             ugfx.Label(5, 20, ugfx.width(), 20, "Captures: %i" % self.gumshoe.captures)
             ugfx.Label(5, 40, ugfx.width(), 20, "XP: %i" % self.gumshoe.xp)
-            pyb.delay(1000)
+
+    def inactive(self):
+        self.state == 'INACTIVE'
 
     def search(self):
-        ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
-        ugfx.Label(5, 5, ugfx.width(), 20, "Scanning for hackers!...")
-        ugfx.set_default_font(ugfx.FONT_NAME)
-        ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
+        self.state == 'SEARCH'
 
     def battle(self, hacker):
-        # 320 x 240
-        #
-        # ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
-        # ugfx.Label(5, 5, ugfx.width(), 20, "Your oponent attacks!")
-        # ugfx.set_default_font(ugfx.FONT_NAME)
-        # ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
-
-        return True
-
-    def welcome(self):
-        return True
+        self.state == 'BATTLE'
 
 ugfx.init()
 buttons.init()
@@ -138,3 +165,6 @@ game = Game()
 
 game.inactive()
 
+while True:
+    game.render()
+    pyb.delay(1000)
