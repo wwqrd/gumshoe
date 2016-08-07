@@ -111,8 +111,8 @@ class Battle:
             return False
 
         if self.dice_roll >= 20:
-            self.target = Hacker.discover(self.xp)
-            target_description = self.tail.description(self.xp)
+            self.target = Hacker.discover(self.player_xp)
+            target_description = self.tail.description(self.player_xp)
             self.status = "You found %ais!" % tail_description
             return True
 
