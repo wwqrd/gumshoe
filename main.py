@@ -33,11 +33,11 @@ def roll_dice(sides):
 class Hacker:
 
     @classmethod
-    def xp_range(player_xp):
-        return round(player_xp)
+    def xp_range(self, player_xp):
+        return round(player_xp) + 1
 
     @classmethod
-    def discover(player_xp):
+    def discover(self, player_xp):
        breed = BREEDS[roll_dice(len(BREEDS) - 1)]
        base_xp = player_xp
        xp_range = Hacker.xp_range(player_xp)
@@ -47,15 +47,15 @@ class Hacker:
     def relative_strength(self, player_xp):
         xp_range = Hacker.xp_range(player_xp)
         xp_relative_value = (self.xp - player_xp + xp_range)/(xp_range*2)
-        relative_strength = round(xp_relative_value * len(STRENGTH))
+        relative_strength = round(xp_relative_value * (len(STRENGTH) - 1))
         return STRENGTH[relative_strength]
 
     def __init__(self, breed, xp):
         self.breed = breed
         self.xp = xp
 
-    def description(player_xp):
-        return ("%i %s" % relative_strength(player_xp), breed)
+    def description(self, player_xp):
+        return ("%(strength)s %(breed)s" % { 'strength': self.relative_strength(player_xp), 'breed': self.breed })
 
 class Gumshoe:
     def __init__(self):
@@ -79,6 +79,7 @@ class Gumshoe:
     # find a hacker
     def conduct_search(self):
         dice = roll_dice(20) + self.heat_factor
+        dice = 20
         print('dice roll: %i' % dice)
 
         if dice >= 15 and dice <= 19:
@@ -113,7 +114,7 @@ class Battle:
             return "You can sense something nearby!"
 
         if self.dice_roll >= 20:
-            return "You found %s!" % self.target.description()
+            return "You found %s!" % self.target.description(self.player_xp)
 
     def get_target(self):
         if not self.target and self.is_found():
@@ -209,5 +210,8 @@ while True:
         pyb.delay(3000)
         game.inactive()
         render()
+
+    if(game_state == 'SEARCH' and game.current_battle.is_found()):
+        # watch for a/b button press
 
     pyb.delay(50)
