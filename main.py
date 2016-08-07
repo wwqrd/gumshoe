@@ -136,10 +136,18 @@ class Game:
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 20, "Scanning for hackers!...")
             ugfx.set_default_font(ugfx.FONT_NAME)
-            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
+            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.battle.status)
         elif self.state == 'BATTLE':
-            return True
-
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 5, ugfx.width(), 20, "Battling:")
+            ugfx.set_default_font(ugfx.FONT_NAME)
+            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.battle.status)
+            # 320 x 240
+            #
+            # ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            # ugfx.Label(5, 5, ugfx.width(), 20, "Your oponent attacks!")
+            # ugfx.set_default_font(ugfx.FONT_NAME)
+            # ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
         else:
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 25, "Hello agent,")
@@ -162,6 +170,8 @@ class Game:
     def search(self):
         print('search method')
         self.state == 'SEARCH'
+        self.battle = Battle(self.gumshoe.xp, dice_roll)
+        if(self.battle == True)
 
     def battle(self, hacker):
         self.state == 'BATTLE'
