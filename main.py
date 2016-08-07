@@ -189,12 +189,15 @@ buttons.init()
 ugfx.clear()
 imu = IMU()
 game_state = 'INACTIVE'
+last_render_state = False
 game = Game()
 
 game.inactive()
 
 while True:
-    game.render()
     if(game_state == 'INACTIVE' and buttons.is_pressed("BTN_A")):
         game.search()
-    pyb.delay(500)
+    if(last_render_state != game_state):
+        game.render()
+        last_render_state = game_state
+    pyb.delay(200)
