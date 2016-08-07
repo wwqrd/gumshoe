@@ -127,29 +127,31 @@ class Battle:
 class Game:
 
     def __init__(self):
+        global game_state
         self.gumshoe = Gumshoe()
-        self.state = 'INACTIVE'
+        game_state = 'INACTIVE'
 
     def render(self):
+        global game_state
         print('render '+self.state)
         ugfx.clear()
-        if self.state == 'SEARCH':
+        if game_state == 'SEARCH':
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 20, "Scanning for hackers!...")
             ugfx.set_default_font(ugfx.FONT_NAME)
-            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.battle.status)
-        elif self.state == 'BATTLE':
+            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.current_battle.status)
+        elif game_state == 'BATTLE':
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 20, "Battling:")
             ugfx.set_default_font(ugfx.FONT_NAME)
-            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.battle.status)
+            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.current_battle.status)
             # 320 x 240
             #
             # ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             # ugfx.Label(5, 5, ugfx.width(), 20, "Your oponent attacks!")
             # ugfx.set_default_font(ugfx.FONT_NAME)
             # ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
-        else:
+        elif game_state == 'INACTIVE':
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 25, "Hello agent,")
             ugfx.Label(5, 25, ugfx.width(), 25, "Captures: %i" % self.gumshoe.captures)
@@ -164,24 +166,28 @@ class Game:
         self.search()
 
     def inactive(self):
-        self.state == 'INACTIVE'
+        global game_state
+        game_state == 'INACTIVE'
         buttons.init()
         buttons.enable_interrupt("BTN_A", self.btn_handler)
 
     def search(self):
+        global game_state
         print('search method')
+        dice_roll = self.gumshoe.conduct_search()
+        self.current_battle = Battle(self.gumshoe.xp, dice_roll)
         self.state == 'SEARCH'
-        self.battle = Battle(self.gumshoe.xp, roll_dice)
-        if(self.battle == True):
-            self.batle()
+        if(self.current_battle.conduct_search() == True):
+            self.battle()
 
     def battle(self):
-        self.state == 'BATTLE'
+        game_state == 'BATTLE'
 
 ugfx.init()
 buttons.init()
 ugfx.clear()
 imu = IMU()
+game_state = 'INACTIVE'
 game = Game()
 
 game.inactive()
