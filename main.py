@@ -100,17 +100,17 @@ class Battle:
         self.dice_roll = dice_roll
         self.status = ''
 
-    def conduct_search(self):
+    def find_battle(self):
 
-        if dice < 15:
+        if self.dice_roll < 15:
             self.status = "You find nothing."
             return False
 
-        if self.dice >= 15 and self.dice <= 19:
+        if self.dice_roll >= 15 and self.dice_roll <= 19:
             self.status = "You can sense something nearby!"
             return False
 
-        if dice >= 20:
+        if self.dice_roll >= 20:
             self.target = Hacker.discover(self.xp)
             target_description = self.tail.description(self.xp)
             self.status = "You found %ais!" % tail_description
@@ -163,8 +163,7 @@ class Game:
 
     def inactive(self):
         global game_state
-        game_state == 'INACTIVE'
-        buttons.init()
+        game_state = 'INACTIVE'
 
     def search(self):
         global game_state
@@ -172,7 +171,7 @@ class Game:
         dice_roll = self.gumshoe.conduct_search()
         self.current_battle = Battle(self.gumshoe.xp, dice_roll)
         game_state == 'SEARCH'
-        if(self.current_battle.conduct_search() == True):
+        if(self.current_battle.find_battle() == True):
             self.battle()
 
     def battle(self):
