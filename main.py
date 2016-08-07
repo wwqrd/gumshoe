@@ -94,26 +94,37 @@ class Gumshoe:
 
 class Battle:
 
+    @classmethod
+    def find_battle(player_xp, dice_roll):
+        return Battle(player_xp, dice_roll)
+
     def __init__(self, player_xp, dice_roll):
-        print('BATTLE')
         self.player_xp = player_xp
         self.dice_roll = dice_roll
-        self.status = ''
+        self.target = False
+        self.battling = False
+        self.get_target()
 
-    def find_battle(self):
+    def status(self):
+        if(self.is_found()):
+            if self.dice_roll < 15:
+                self.status = "You find nothing."
 
-        if self.dice_roll < 15:
-            self.status = "You find nothing."
+            if self.dice_roll >= 15 and self.dice_roll <= 19:
+                self.status = "You can sense something nearby!"
+
+            if self.dice_roll >= 20:
+                self.status = "You found %s!" % self.target.description()
+
+    def get_target(self):
+        if not self.target and self.is_found():
+            self.target = Hacker.discover(self.xp)
+        return self.target
+
+    def is_found(self):
+        if self.dice_roll <= 19:
             return False
-
-        if self.dice_roll >= 15 and self.dice_roll <= 19:
-            self.status = "You can sense something nearby!"
-            return False
-
-        if self.dice_roll >= 20:
-            self.target = Hacker.discover(self.player_xp)
-            target_description = self.tail.description(self.player_xp)
-            self.status = "You found %ais!" % tail_description
+        else:
             return True
 
     # Do you want to do battle?
@@ -139,12 +150,10 @@ class Game:
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 20, "Scanning for hackers!...")
             ugfx.set_default_font(ugfx.FONT_NAME)
-            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.current_battle.status)
+            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.current_battle.status())
         elif game_state == 'BATTLE':
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
-            ugfx.Label(5, 5, ugfx.width(), 20, "Battling:")
-            ugfx.set_default_font(ugfx.FONT_NAME)
-            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.current_battle.status)
+            ugfx.Label(5, 5, ugfx.width(), 20, "Battle mode")
             # 320 x 240
             #
             # ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
@@ -169,10 +178,8 @@ class Game:
         global game_state
         print('search method')
         dice_roll = self.gumshoe.conduct_search()
-        self.current_battle = Battle(self.gumshoe.xp, dice_roll)
+        self.current_battle = Battle.find_battle(self.gumshoe.xp, dice_roll)
         game_state == 'SEARCH'
-        if(self.current_battle.find_battle() == True):
-            self.battle()
 
     def battle(self):
         game_state == 'BATTLE'
