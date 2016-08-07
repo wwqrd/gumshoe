@@ -133,7 +133,7 @@ class Game:
 
     def render(self):
         global game_state
-        print('render '+self.state)
+        print('render '+game_state)
         ugfx.clear()
         if game_state == 'SEARCH':
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
