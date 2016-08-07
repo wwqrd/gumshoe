@@ -106,15 +106,51 @@ class Battle:
         self.battling = False
         self.get_target()
 
-    def status(self):
         if self.dice_roll < 15:
-            return "You find nothing."
+            self.status = "You find nothing."
 
         if self.dice_roll >= 15 and self.dice_roll <= 19:
-            return "You can sense something nearby!"
+            self.status = "You can sense something nearby!"
 
         if self.dice_roll >= 20:
-            return "You found %s!" % self.target.description(self.player_xp)
+            self.status = "You found %s!" % self.target.description(self.player_xp)
+
+    def begin(self):
+        self.battling = True
+        self.battle_complete = False
+        self.player_hp = self.player_xp
+        self.hacker_xp = self.target.xp
+        self.turn_hacker()
+
+    def turn_hacker(self):
+        self.turn = 'HACKER'
+        attack = dice_roll(self.target.xp / 5)
+        hit = dice_roll(5)
+        if hit > 2:
+            self.player_hp = self.player_hp - attack
+
+        self.check_outcome()
+
+    def turn_player(self):
+        self.turn = 'PLAYER'
+        attack = dice_roll(self.player_xp / 3)
+        hit = dice_roll(5)
+        if hit > 2:
+            self.hacker_hp = self.hacker_hp - attack
+
+        self.check_outcome()
+
+        self.turn_hacker()
+
+    def check_outcome(self):
+        if self.hacker_xp <= 0:
+            self.status = 'Hacker escapes!'
+            self.battling = False
+            self.battle_complete = True
+        elif self.player_hp <= 0:
+            self.status = "You captured %s!" % self.target.description(self.player_xp)
+            self.battling = False
+            self.battle_complete = True
 
     def get_target(self):
         if not self.target and self.is_found():
@@ -126,14 +162,6 @@ class Battle:
             return False
         else:
             return True
-
-    # Do you want to do battle?
-    def choose_action():
-        return True
-
-    # Do battle!
-    def battle():
-        return True
 
 class Game:
 
@@ -150,16 +178,34 @@ class Game:
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 20, "Scanning for hackers!...")
             ugfx.set_default_font(ugfx.FONT_NAME)
-            ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.current_battle.status())
-        # elif game_state == 'BATTLE':
-            # ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
-            # ugfx.Label(5, 5, ugfx.width(), 20, "Battle mode")
-            # 320 x 240
-            #
-            # ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
-            # ugfx.Label(5, 5, ugfx.width(), 20, "Your oponent attacks!")
-            # ugfx.set_default_font(ugfx.FONT_NAME)
-            # ugfx.Label(5, 30, ugfx.width(), ugfx.height()-30, self.gumshoe.conduct_search())
+            ugfx.Label(5, 30, ugfx.width(), 40, self.current_battle.status())
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 100, ugfx.width(), 20, "Press (A) to battle, (B) to try to escape")
+        elif game_state == 'BATTLE':
+            ugfx.set_default_font(ugfx.FONT_NAME)
+            ugfx.Label(5, 30, ugfx.width(), 40, self.current_battle.status())
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 100, ugfx.width(), 20, "Press (A) to continue, (B) to try to escape")
+        elif game_state == 'ATTACK':
+            ugfx.set_default_font(ugfx.FONT_NAME)
+            ugfx.Label(5, 30, ugfx.width(), 40, self.current_battle.status())
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 100, ugfx.width(), 20, "Press (A) to continue, (B) to try to escape")
+        elif game_state == 'ESCAPE':
+            ugfx.set_default_font(ugfx.FONT_NAME)
+            ugfx.Label(5, 30, ugfx.width(), 40, self.current_battle.status())
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 100, ugfx.width(), 20, "Press (A) to continue, (B) to try to escape")
+        elif game_state == 'WIN':
+            ugfx.set_default_font(ugfx.FONT_NAME)
+            ugfx.Label(5, 30, ugfx.width(), 40, self.current_battle.status())
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 100, ugfx.width(), 20, "Press (A) to continue, (B) to try to escape")
+        elif game_state == 'LOSE':
+            ugfx.set_default_font(ugfx.FONT_NAME)
+            ugfx.Label(5, 30, ugfx.width(), 40, self.current_battle.status())
+            ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
+            ugfx.Label(5, 100, ugfx.width(), 20, "Press (A) to continue, (B) to try to escape")
         elif game_state == 'INACTIVE':
             ugfx.set_default_font(ugfx.FONT_MEDIUM_BOLD)
             ugfx.Label(5, 5, ugfx.width(), 25, "Hello agent,")
@@ -182,7 +228,19 @@ class Game:
         game_state = 'SEARCH'
 
     def battle(self):
+        global game_state
         game_state = 'BATTLE'
+        self.current_battle.begin()
+
+    def attack(self):
+        global game_state
+        self.current_battle.attack()
+        game_state = 'ATTACK'
+
+    def escape(self):
+        global game_state
+        self.current_battle.escape()
+        game_state = 'ESCAPE'
 
 ugfx.init()
 buttons.init()
@@ -206,12 +264,29 @@ while True:
     if(game_state == 'INACTIVE' and buttons.is_pressed("BTN_A")):
         game.search()
         render()
+
     if(game_state == 'SEARCH' and not game.current_battle.is_found()):
         pyb.delay(3000)
         game.inactive()
         render()
 
     if(game_state == 'SEARCH' and game.current_battle.is_found()):
-        # watch for a/b button press
+        if buttons.is_pressed("BTN_A"):
+            game.battle()
+            render()
+
+        elif buttons.is_pressed("BTN_B"):
+            game.escape()
+            render()
+            pyb.delay(3000)
+            game.inactive()
+            render()
+
+    if(game_state == 'BATTLE'):
+        if(game.current_battle.turn == 'PLAYER' and buttons.is_pressed("BTN_A")):
+            game.attack()
+        if(game.current_battle.turn == 'PLAYER' and buttons.is_pressed("BTN_B")):
+            game.escape()
+        render()
 
     pyb.delay(50)
